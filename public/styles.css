@@ -1,0 +1,308 @@
+/* 全体のスタイル */
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb);
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* コンテナ */
+.container {
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* タイトル */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #ff6f61;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ステータス */
+.status {
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+
+.status p {
+  margin: 5px 0;
+  font-weight: bold;
+  color: #444;
+}
+
+/* ポケモン画像 */
+img {
+  width: 200px; /* プレースホルダーと同じサイズ */
+  height: 200px; /* プレースホルダーと同じサイズ */
+  margin: 20px auto;
+  border: 5px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  object-fit: contain; /* 画像サイズ調整 */
+}
+
+img:hover {
+  transform: scale(1.1);
+}
+
+/* 選択肢 */
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.option {
+  background: #fff;
+  padding: 15px 20px;
+  border: 2px solid #ff6f61;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #ff6f61;
+  font-weight: bold;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  flex: 1 1 calc(30% - 20px);
+  max-width: calc(30% - 20px);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.option:hover {
+  background: #ff6f61;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.correct {
+  background: #28a745 !important;
+  color: #fff;
+  border-color: #28a745;
+}
+
+.incorrect {
+  background: #dc3545 !important;
+  color: #fff;
+  border-color: #dc3545;
+}
+
+/* メッセージ */
+.message {
+  margin-top: 20px;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: bold;
+}
+
+/* 次の問題ボタン */
+#nextButton {
+  margin-top: 20px;
+  padding: 15px 25px;
+  font-size: 1.2rem;
+  border: none;
+  background: #ff6f61;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#nextButton:hover {
+  background: #ff4f41;
+  transform: scale(1.1);
+}
+
+/* 称号一覧 */
+.ranks {
+  margin-top: 40px;
+  text-align: left;
+  color: #444;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ranks h2 {
+  color: #ff6f61;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.ranks ul {
+  list-style: none;
+  padding: 0;
+}
+
+.ranks li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* 各称号名 */
+.ranks span {
+  width: 200px; /* 固定幅を設定 */
+  text-align: left;
+  white-space: nowrap; /* テキストを1行にする */
+  overflow: hidden; /* はみ出し部分を隠す */
+  text-overflow: ellipsis; /* はみ出し部分を省略記号で表示 */
+}
+
+/* ポイント部分 */
+.ranks li::before {
+  content: attr(data-points);
+  font-weight: bold;
+  margin-right: 10px;
+  color: #ff6f61;
+  font-size: 1rem;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  h1 {
+      font-size: 2rem;
+  }
+
+  .option {
+      flex: 1 1 calc(45% - 20px);
+      max-width: calc(45% - 20px);
+  }
+
+  #nextButton {
+      font-size: 1rem;
+      padding: 10px 20px;
+  }
+
+  .ranks h2 {
+      font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+      font-size: 1.8rem;
+  }
+
+  .option {
+      flex: 1 1 100%;
+      max-width: 100%;
+  }
+
+  #nextButton {
+      font-size: 1rem;
+      padding: 10px 20px;
+  }
+
+  .ranks {
+      padding: 10px;
+  }
+}
+
+/* プレースホルダー */
+.placeholder {
+  width: 200px; /* 画像と同じサイズ */
+  height: 200px; /* 画像と同じサイズ */
+  background-color: #f0f0f0;
+  color: #999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  font-weight: bold;
+  border: 5px solid #ddd;
+  border-radius: 10px;
+  margin: 20px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* ポイント表示 */
+#points {
+  font-size: 1rem; /* 全体のフォントサイズは小さめ */
+  color: #333; /* 通常のテキスト色 */
+  font-weight: normal;
+}
+
+/* ポイントの数字部分を強調 */
+#pointsValue {
+  font-size: 2rem; /* 数字部分を大きく */
+  color: #ff6f61; /* 目立つ色 */
+  font-weight: bold; /* 太字で強調 */
+}
+
+/* 初期状態の称号（未獲得時） */
+.ranks span {
+  visibility: hidden;
+  font-size: 0.9rem;
+  color: #999;
+  display: inline-block;
+  width: 150px;
+  text-align: center;
+  margin-left: 10px;
+  transition: transform 0.6s ease-in-out, visibility 0s linear 0.6s;
+}
+
+/* 称号を獲得した際の表示 */
+.ranks span.show {
+  visibility: visible;
+  font-size: 1rem;
+  color: #333;
+  font-weight: bold;
+  transform: rotateY(360deg);
+  transition: transform 0.6s ease-in-out, visibility 0s linear 0s;
+}
+
+/* 不正解時の一言コメントのスタイル */
+.comment {
+  font-size: 1.8rem; /* フォントを大きく */
+  color: #ffffff; /* 白い文字で強調 */
+  font-weight: bold; /* 太字にして目立たせる */
+  text-align: center; /* 中央揃え */
+  margin-top: 20px; /* 上に余白を追加 */
+  background: linear-gradient(45deg, #ff6f61, #ff8f6f); /* 華やかなグラデーション */
+  padding: 20px; /* 内側の余白 */
+  border-radius: 15px; /* 丸みを付ける */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 影で浮き上がる効果 */
+  display: inline-block; /* コメント全体を中央揃え */
+  max-width: 90%; /* コメントの幅を調整 */
+  position: relative; /* アイコンのための相対配置 */
+}
+
+
+/* モバイル対応: コメントデザインの最適化 */
+@media (max-width: 768px) {
+  .comment {
+      font-size: 1.5rem;
+      padding: 15px;
+  }
+  .comment::before {
+      font-size: 1.2rem; /* アイコンを少し小さく */
+      width: 30px; /* 円形の幅を縮小 */
+      height: 30px; /* 円形の高さを縮小 */
+      top: -20px; /* 位置を微調整 */
+  }
+}

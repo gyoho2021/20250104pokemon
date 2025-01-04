@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポケモンクイズ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ポケモンクイズ</h1>
+
+        <!-- 初期画面（説明とスタートボタン） -->
+        <div id="startScreen" class="start-screen">
+            <p>ポケモンの名前を連続で当てて称号をゲットしよう！</p>
+            <button id="startButton">スタート</button>
+        </div>
+
+        <!-- クイズ画面 -->
+        <div id="quizScreen" class="quiz-screen" style="display: none;">
+            <!-- ポイントと称号を表示 -->
+            <div class="status">
+                <p id="points">ポケモンポイント: <span id="pointsValue">0</span></p>
+                <p id="rank">現在の称号: <span id="rankValue">なし</span></p>
+            </div>
+
+            <!-- ポケモン画像 -->
+            <div class="image-container">
+                <div id="placeholder" class="placeholder">?</div>
+                <img id="pokemonImage" src="" alt="ポケモンの画像" style="display: none;">
+            </div>
+
+            <!-- 選択肢 -->
+            <div class="options"></div>
+
+            <!-- メッセージ -->
+            <div class="message" id="message"></div>
+
+            <!-- 次の問題ボタン -->
+            <button id="nextButton" style="display: none;">次の問題</button>
+        </div>
+
+        <!-- 称号一覧 -->
+        <div class="ranks">
+            <h2>称号一覧</h2>
+            <ul>
+                <li data-points="5ポイント"> <span id="rank5">ポケモン初心者</span></li>
+                <li data-points="10ポイント"> <span id="rank10">ポケモン愛好家</span></li>
+                <li data-points="15ポイント"> <span id="rank15">ジムチャレンジャー</span></li>
+                <li data-points="20ポイント"> <span id="rank20">バッジコレクター</span></li>
+                <li data-points="25ポイント"> <span id="rank25">ポケモン博士見習い</span></li>
+                <li data-points="30ポイント"> <span id="rank30">ポケモン研究員</span></li>
+                <li data-points="35ポイント"> <span id="rank35">トレーナーエリート</span></li>
+                <li data-points="40ポイント"> <span id="rank40">ジムリーダー候補</span></li>
+                <li data-points="45ポイント"> <span id="rank45">ポケモンリーグ挑戦者</span></li>
+                <li data-points="50ポイント"> <span id="rank50">ポケモンマスター見習い</span></li>
+                <li data-points="55ポイント"> <span id="rank55">ポケモンの達人</span></li>
+                <li data-points="60ポイント"> <span id="rank60">ポケモンマスター</span></li>
+                <li data-points="65ポイント"> <span id="rank65">ポケモン専門家</span></li>
+                <li data-points="70ポイント"> <span id="rank70">ポケモン愛好家</span></li>
+                <li data-points="75ポイント"> <span id="rank75">ポケモンの伝説</span></li>
+                <li data-points="80ポイント"> <span id="rank80">チャンピオン</span></li>
+                <li data-points="85ポイント"> <span id="rank85">ポケモンエリート</span></li>
+                <li data-points="90ポイント"> <span id="rank90">ポケモンのレジェンド</span></li>
+                <li data-points="95ポイント"> <span id="rank95">ポケモン図鑑マスター</span></li>
+                <li data-points="100ポイント"> <span id="rank100">ポケモンの神</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let points = 0;
+        let lastCorrect = true;
+
+        const rankThresholds = [
+            { points: 5, rank: "ポケモン初心者" },
+            { points: 10, rank: "ポケモン愛好家" },
+            { points: 15, rank: "ジムチャレンジャー" },
+            { points: 20, rank: "バッジコレクター" },
+            { points: 25, rank: "ポケモン博士見習い" },
+            { points: 30, rank: "ポケモン研究員" },
+            { points: 35, rank: "トレーナーエリート" },
+            { points: 40, rank: "ジムリーダー候補" },
+            { points: 45, rank: "ポケモンリーグ挑戦者" },
+            { points: 50, rank: "ポケモンマスター見習い" },
+            { points: 55, rank: "ポケモンの達人" },
+            { points: 60, rank: "ポケモンマスター" },
+            { points: 65, rank: "ポケモン専門家" },
+            { points: 70, rank: "ポケモン愛好家" },
+            { points: 75, rank: "ポケモンの伝説" },
+            { points: 80, rank: "チャンピオン" },
+            { points: 85, rank: "ポケモンエリート" },
+            { points: 90, rank: "ポケモンのレジェンド" },
+            { points: 95, rank: "ポケモン図鑑マスター" },
+            { points: 100, rank: "ポケモンの神" },
+        ];
+
+        const startScreen = document.getElementById('startScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const startButton = document.getElementById('startButton');
+
+        const pokemonImage = document.getElementById('pokemonImage');
+        const placeholder = document.getElementById('placeholder');
+        const optionsContainer = document.querySelector('.options');
+        const message = document.getElementById('message');
+        const nextButton = document.getElementById('nextButton');
+        const pointsDisplay = document.getElementById('points');
+        const rankDisplay = document.getElementById('rank');
+
+        startButton.addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            loadQuiz();
+        });
+
+        async function loadQuiz() {
+            message.textContent = '';
+            optionsContainer.innerHTML = '';
+            nextButton.style.display = 'none';
+
+            placeholder.style.display = 'flex';
+            pokemonImage.style.display = 'none';
+
+            try {
+                const response = await fetch('/pokemon/quiz');
+                if (!response.ok) {
+                    throw new Error(`HTTPエラー! status: ${response.status}`);
+                }
+                const quizData = await response.json();
+
+                pokemonImage.onload = () => {
+                    placeholder.style.display = 'none';
+                    pokemonImage.style.display = 'block';
+                };
+
+                pokemonImage.src = quizData.image;
+
+                quizData.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    button.className = 'option';
+                    button.addEventListener('click', () => checkAnswer(option, quizData.correct));
+                    optionsContainer.appendChild(button);
+                });
+            } catch (error) {
+                console.error("Fetchエラー:", error);
+                message.textContent = 'クイズの読み込みに失敗しました。';
+                placeholder.style.display = 'none';
+            }
+        }
+
+        function checkAnswer(selected, correct) {
+    const buttons = document.querySelectorAll('.option');
+    buttons.forEach(button => {
+        button.disabled = true;
+        if (button.textContent === correct) {
+            button.classList.add('correct');
+        } else {
+            button.classList.add('incorrect');
+        }
+    });
+
+    if (selected === correct) {
+        if (!lastCorrect) {
+            points = 1; // リセット後、再スタート
+        } else {
+            points++;
+        }
+        lastCorrect = true;
+        updatePointsAndRank();
+        message.textContent = '正解！🎉';
+    } else {
+        lastCorrect = false;
+        const comment = getCommentByPoints(points); // ポイントごとのコメントを取得
+        message.innerHTML = `
+            不正解... 正解は「${correct}」でした 😢<br>
+            あなたの今回のポイントは${points}点でした！<br>
+            <div class="comment">${comment}</div>
+        `;
+        points = 0; // リセット
+        updatePointsAndRank();
+    }
+
+    nextButton.style.display = 'inline-block';
+}
+
+
+        function updatePointsAndRank() {
+            const pointsValue = document.getElementById('pointsValue');
+            pointsValue.textContent = points;
+
+            let currentRank = "なし";
+            for (let i = rankThresholds.length - 1; i >= 0; i--) {
+                if (points >= rankThresholds[i].points) {
+                    currentRank = rankThresholds[i].rank;
+                    break;
+                }
+            }
+
+            const rankValue = document.getElementById('rankValue');
+            rankValue.textContent = currentRank;
+        }
+
+        function getCommentByPoints(points) {
+            if (points <= 5) {
+                return "ポケモンに疎すぎます！これから勉強ですね。";
+            } else if (points <= 10) {
+                return "少しは知ってるけど、子どもには勝てませんね。";
+            } else if (points <= 15) {
+                return "昔の記憶に頼ってますか？もっと努力しましょう！";
+            } else if (points <= 20) {
+                return "なかなか良い感じです！でもまだまだですよ！";
+            } else if (points <= 25) {
+                return "少しずつ上達してますね！ポケモン博士まであと少し！";
+            } else if (points <= 30) {
+                return "ポケモン愛が感じられます！もっと上を目指しましょう！";
+            } else if (points <= 35) {
+                return "すごい！令和のポケモン事情にもついていけてますね！";
+            } else if (points <= 40) {
+                return "さすがです！ポケモンマスターが近づいてきました！";
+            } else if (points <= 45) {
+                return "相当詳しいですね！もうプロ級の知識です！";
+            } else if (points <= 50) {
+                return "あなたはポケモンの達人です！友達に自慢しましょう！";
+            } else if (points <= 55) {
+                return "ポケモン愛好家として恥じない素晴らしい知識です！";
+            } else if (points <= 60) {
+                return "あなたのポケモン知識は見事です！さらに極めてください！";
+            } else if (points <= 65) {
+                return "ここまで来るとポケモンの専門家と言ってもいいでしょう！";
+            } else if (points <= 70) {
+                return "真のポケモン愛好家ですね！ここまで来たらマスターを目指そう！";
+            } else if (points <= 75) {
+                return "驚くべき知識量！あなたはポケモン界の生ける伝説です！";
+            } else if (points <= 80) {
+                return "ここまで詳しいとは…チャンピオンの風格が漂っています！";
+            } else if (points <= 85) {
+                return "あなたはポケモン界のエリート！次は世界一を目指しましょう！";
+            } else if (points <= 90) {
+                return "レジェンドの称号にふさわしい素晴らしい知識です！";
+            } else if (points <= 95) {
+                return "あなたの知識はポケモン図鑑そのもの！まさにマスターですね！";
+            } else {
+                return "完璧です！あなたはポケモンの神と呼ばれるにふさわしい存在です！";
+            }
+        }
+
+        nextButton.addEventListener('click', loadQuiz);
+    </script>
+</body>
+</html>
