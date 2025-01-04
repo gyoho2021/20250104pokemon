@@ -185,21 +185,27 @@
 }
 
 
-        function updatePointsAndRank() {
-            const pointsValue = document.getElementById('pointsValue');
-            pointsValue.textContent = points;
+function updatePointsAndRank() {
+    const pointsValue = document.getElementById('pointsValue');
+    pointsValue.textContent = points;
 
-            let currentRank = "なし";
-            for (let i = rankThresholds.length - 1; i >= 0; i--) {
-                if (points >= rankThresholds[i].points) {
-                    currentRank = rankThresholds[i].rank;
-                    break;
-                }
+    let currentRank = "なし";
+    for (let i = rankThresholds.length - 1; i >= 0; i--) {
+        if (points >= rankThresholds[i].points) {
+            currentRank = rankThresholds[i].rank;
+
+            // 称号がポイントに達したら表示状態を変更
+            const rankElement = document.getElementById(`rank${rankThresholds[i].points}`);
+            if (rankElement && !rankElement.classList.contains('show')) {
+                rankElement.classList.add('show'); // 称号を表示する
             }
-
-            const rankValue = document.getElementById('rankValue');
-            rankValue.textContent = currentRank;
         }
+    }
+
+    const rankValue = document.getElementById('rankValue');
+    rankValue.textContent = currentRank;
+}
+
 
         function getCommentByPoints(points) {
             if (points <= 5) {

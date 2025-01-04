@@ -10,38 +10,41 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* 上寄せ配置 */
   box-sizing: border-box;
+  padding-top: 10px; /* 全体を少し上に */
 }
 
 /* コンテナ */
 .container {
   width: 90%;
   max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  margin: 5px auto; /* 上下の余白をさらに減らす */
+  padding: 15px 20px; /* 内側の余白を調整 */
   background: rgba(255, 255, 255, 0.8);
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
+  position: relative;
+  top: -10px; /* 全体をさらに上に移動 */
 }
 
-/* タイトル */
+/* タイトルのスタイル */
 h1 {
   font-size: 2.5rem;
-  margin-bottom: 10px;
+  margin-bottom: 3px; /* 下の余白をさらに縮小 */
   color: #ff6f61;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* ステータス */
+/* ステータス（ポケモンポイントなど） */
 .status {
-  margin-bottom: 20px;
+  margin-bottom: 8px; /* 下の余白をさらに縮小 */
   font-size: 1.2rem;
 }
 
 .status p {
-  margin: 5px 0;
+  margin: 2px 0; /* ポイントと称号間の余白を縮小 */
   font-weight: bold;
   color: #444;
 }
@@ -112,22 +115,30 @@ img:hover {
   font-weight: bold;
 }
 
-/* 次の問題ボタン */
+/* 次の問題ボタンのスタイル調整 */
 #nextButton {
-  margin-top: 20px;
-  padding: 15px 25px;
-  font-size: 1.2rem;
-  border: none;
-  background: #ff6f61;
-  color: #fff;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: background 0.3s ease, transform 0.2s ease;
+  font-size: 1rem; /* ボタン文字サイズを調整 */
+  padding: 10px 20px; /* パディングを調整 */
+  margin-top: 20px; /* 上部の余白を少し追加 */
+  width: 90%; /* ボタン幅を広げる */
+  max-width: 400px; /* ボタンの最大幅を制限 */
+  display: block; /* ボタンを中央揃え */
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #ff6f61; /* ボタンの背景色 */
+  color: white; /* ボタンの文字色 */
+  border: none; /* ボーダーを消す */
+  border-radius: 5px; /* 角を丸くする */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 軽い影を追加 */
+  transition: background-color 0.3s ease; /* 背景色の変化をスムーズに */
 }
 
 #nextButton:hover {
-  background: #ff4f41;
-  transform: scale(1.1);
+  background-color: #ff8f6f; /* ホバー時の背景色変更 */
+}
+
+#nextButton:active {
+  background-color: #e55b50; /* クリック時の背景色変更 */
 }
 
 /* 称号一覧 */
@@ -165,13 +176,16 @@ img:hover {
   color: #333;
 }
 
-/* 各称号名 */
+/* 称号を獲得した際の表示 */
 .ranks span {
-  width: 200px; /* 固定幅を設定 */
-  text-align: left;
-  white-space: nowrap; /* テキストを1行にする */
-  overflow: hidden; /* はみ出し部分を隠す */
-  text-overflow: ellipsis; /* はみ出し部分を省略記号で表示 */
+  visibility: hidden; /* 初期状態は非表示 */
+  transition: transform 0.6s ease-in-out, visibility 0s linear 0.6s;
+}
+
+.ranks span.show {
+  visibility: visible; /* 獲得後は表示 */
+  transform: rotateY(360deg); /* 回転アニメーション */
+  transition: transform 0.6s ease-in-out, visibility 0s linear 0s;
 }
 
 /* ポイント部分 */
@@ -186,8 +200,10 @@ img:hover {
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
   h1 {
-      font-size: 2rem;
-  }
+    font-size: 1.8rem; /* スマホ用にフォントサイズをさらに小さく */
+    margin-top: 5px; /* タイトルをさらに上に移動 */
+    margin-bottom: 15px; /* 下の余白を少なく */
+}
 
   .option {
       flex: 1 1 calc(45% - 20px);
