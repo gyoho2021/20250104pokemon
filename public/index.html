@@ -169,20 +169,21 @@
         lastCorrect = true;
         updatePointsAndRank();
         message.textContent = '正解！🎉';
+        nextButton.textContent = "次の問題"; // 正解時
     } else {
         lastCorrect = false;
         const comment = getCommentByPoints(points); // ポイントごとのコメントを取得
         message.innerHTML = `
             不正解... 正解は「${correct}」でした 😢<br>
-            あなたの今回のポイントは${points}点でした！<br>
             <div class="comment">${comment}</div>
         `;
-        points = 0; // リセット
-        updatePointsAndRank();
+        nextButton.textContent = "もう一度チャレンジ"; // 不正解時
     }
 
     nextButton.style.display = 'inline-block';
 }
+
+
 
 
 function updatePointsAndRank() {
@@ -199,12 +200,14 @@ function updatePointsAndRank() {
             if (rankElement && !rankElement.classList.contains('show')) {
                 rankElement.classList.add('show'); // 称号を表示する
             }
+            break; // 適切な称号が見つかったらループを終了
         }
     }
 
     const rankValue = document.getElementById('rankValue');
     rankValue.textContent = currentRank;
 }
+
 
 
         function getCommentByPoints(points) {
@@ -251,7 +254,24 @@ function updatePointsAndRank() {
             }
         }
 
-        nextButton.addEventListener('click', loadQuiz);
+        nextButton.addEventListener('click', () => {
+    if (!lastCorrect) {
+        // ポイントと称号をリセット
+        points = 0;
+        updatePointsAndRank();
+
+        // 称号一覧のリセット（回転しないで非表示にする）
+        const rankElements = document.querySelectorAll('.ranks span');
+        rankElements.forEach(rank => {
+            rank.style.transition = 'none'; // アニメーションを一時的に無効化
+            rank.classList.remove('show'); // `show` クラスを削除
+            setTimeout(() => {
+                rank.style.transition = ''; // アニメーションを元に戻す
+            }, 50); // 少し遅れてアニメーションを再有効化
+        });
+    }
+    loadQuiz(); // 次の問題をロード
+});
     </script>
 </body>
 </html>

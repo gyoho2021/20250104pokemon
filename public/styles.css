@@ -176,16 +176,19 @@ img:hover {
   color: #333;
 }
 
-/* 称号を獲得した際の表示 */
+/* 初期状態の称号（未獲得時） */
 .ranks span {
-  visibility: hidden; /* 初期状態は非表示 */
-  transition: transform 0.6s ease-in-out, visibility 0s linear 0.6s;
+  opacity: 0; /* 非表示状態 */
+  transform: none; /* 回転なし */
+  transition: opacity 0.3s ease; /* 表示・非表示のみにアニメーション */
 }
 
+/* 称号を獲得した際の表示 */
 .ranks span.show {
-  visibility: visible; /* 獲得後は表示 */
-  transform: rotateY(360deg); /* 回転アニメーション */
-  transition: transform 0.6s ease-in-out, visibility 0s linear 0s;
+  opacity: 1; /* 表示 */
+  transform: none; /* 回転なし */
+  visibility: visible; /* 表示状態 */
+  transition: opacity 0.3s ease; /* 表示時のスムーズなアニメーション */
 }
 
 /* ポイント部分 */
@@ -321,4 +324,34 @@ img:hover {
       height: 30px; /* 円形の高さを縮小 */
       top: -20px; /* 位置を微調整 */
   }
+}
+
+/* スタートボタン */
+#startButton {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 15px 30px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff6f61, #ff9a9e);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  text-transform: uppercase; /* 全て大文字に */
+  letter-spacing: 1px; /* 文字の間隔を少し広げる */
+}
+
+/* ホバー時のスタイル */
+#startButton:hover {
+  transform: scale(1.1); /* 拡大 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* シャドウを強調 */
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4); /* ホバー時の色変更 */
+}
+
+/* クリック時のスタイル */
+#startButton:active {
+  transform: scale(1.05); /* 少し縮小 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 元のシャドウ */
+  background: linear-gradient(135deg, #e55b50, #ff6f61); /* クリック時の色変更 */
 }
